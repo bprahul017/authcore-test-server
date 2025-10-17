@@ -1,0 +1,17 @@
+{
+  "watch": ["src"],
+  "ext": "ts,json",
+  "ignore": [
+    "src/db/otp.json",
+    "src/db/blacklist.json",
+    "src/db/user.json",
+    "node_modules",
+    ".git",
+    ".env",
+    "logs",
+    "dist",
+    "build",
+    "package-lock.json"
+  ],
+  "exec": "ts-node src/index.ts"
+}
