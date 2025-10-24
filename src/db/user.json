@@ -1,12 +1,5 @@
 [
   {
-    "id": 1,
-    "username": "Rahul",
-    "email": "rahul.b@flycatchtech.com",
-    "password": "rahul@123",
-    "is2faEnabled": true
-  },
-  {
     "id": 2,
     "username": "Sneha",
     "email": "sneha.mishra22@yopmail.com",
@@ -41,6 +34,16 @@
     "id": 6,
     "email": "rahulzantoz10@gmail.com",
     "username": "rahulzantoz10@gmail.com",
+    "password": "",
+    "is2faEnabled": false,
+    "grants": [
+      "ROLE_USER"
+    ]
+  },
+  {
+    "id": 7,
+    "email": "rahul.b@flycatchtech.com",
+    "username": "rahul.b@flycatchtech.com",
     "password": "",
     "is2faEnabled": false,
     "grants": [

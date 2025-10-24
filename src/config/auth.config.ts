@@ -16,8 +16,8 @@ export const authConfig = auth.config({
   twoFA: {
     enabled: true,
     otpExpiresIn: "2m",
-    otpLength: 6,
-    otpType: "numeric",
+    otpLength: 7,
+    otpType: "alphanumeric",
     storeOtp: StoreOtp,
     transport: sendOTP,
     getStoredOtp: getNonExpiredOtp,
@@ -31,7 +31,7 @@ export const authConfig = auth.config({
     failureRedirect: `${envConfig.BASE_URL}/oauth-failure`,
     autoProvision: true,
     defaultRole: "ROLE_USER",
-    setRefreshCookie: true,
+    setRefreshCookie: false,
     appendTokensInRedirect: false,
     includeAuthorities: true,
     issueJwt: false,
@@ -114,6 +114,7 @@ export const authConfig = auth.config({
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   },
+
 
   session: {
     enabled: false,
