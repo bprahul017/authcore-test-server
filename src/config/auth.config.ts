@@ -1,9 +1,16 @@
 import auth from "@flycatch/auth-core";
 import envConfig from "./env.config";
-import { getUserByMail, verifyPassword, createUser } from "../services/auth.service";
+import {
+  getUserByMail,
+  verifyPassword,
+  createUser,
+} from "../services/auth.service";
 import { getNonExpiredOtp, StoreOtp } from "../services/otp.service";
 import { sendOTP } from "../services/mail.service";
-import { tokenBlacklistStorageService, handleLogoutAll } from "../services/token.service";
+import {
+  tokenBlacklistStorageService,
+  handleLogoutAll,
+} from "../services/token.service";
 import { Strategy as LinkedInStrategy } from "passport-linkedin-oauth2";
 import { Strategy as SpotifyStrategy } from "passport-spotify";
 import { Strategy as DiscordStrategy } from "passport-discord";
@@ -29,12 +36,22 @@ export const authConfig = auth.config({
     prefix: "/auth",
     successRedirect: `${envConfig.BASE_URL}/oauth-success`,
     failureRedirect: `${envConfig.BASE_URL}/oauth-failure`,
-    autoProvision: true,
     defaultRole: "ROLE_USER",
     setRefreshCookie: false,
     appendTokensInRedirect: false,
     includeAuthorities: true,
-    issueJwt: false,
+    issueJwt: true,
+    onSuccess(info) {
+      const { profile, existingUser, provider } = info;
+
+      // Case 1: User already exists
+      if (existingUser) {
+        console.log(`Existing user logged in: ${existingUser.email}`);
+        return existingUser;
+      }
+
+      return createUser(profile);
+    },
 
     providers: {
       google: {
@@ -43,7 +60,11 @@ export const authConfig = auth.config({
         callbackURL: "/auth/google/callback",
         scope: ["profile", "email"],
         strategy: GoogleStrategy,
-        profileMapping: { email: "emails[0].value", id: "id", name: "displayName" },
+        profileMapping: {
+          email: "emails[0].value",
+          id: "id",
+          name: "displayName",
+        },
       },
       facebook: {
         clientID: envConfig.FACEBOOK_CLIENT_ID,
@@ -51,8 +72,14 @@ export const authConfig = auth.config({
         callbackURL: "/auth/facebook/callback",
         strategy: FacebookStrategy,
         scope: ["email", "public_profile"],
-        customConfig: { profileFields: ["id", "displayName", "emails", "photos"] },
-        profileMapping: { id: "id", email: "emails[0].value", name: "displayName" },
+        customConfig: {
+          profileFields: ["id", "displayName", "emails", "photos"],
+        },
+        profileMapping: {
+          id: "id",
+          email: "emails[0].value",
+          name: "displayName",
+        },
       },
       github: {
         clientID: envConfig.GITHUB_CLIENT_ID,
@@ -60,7 +87,11 @@ export const authConfig = auth.config({
         callbackURL: "/auth/github/callback",
         scope: ["user:email"],
         strategy: GitHubStrategy,
-        profileMapping: { email: "emails[0].value", id: "id", name: "displayName" },
+        profileMapping: {
+          email: "emails[0].value",
+          id: "id",
+          name: "displayName",
+        },
       },
       twitter: {
         clientID: envConfig.TWITTER_CONSUMER_KEY,
@@ -72,7 +103,11 @@ export const authConfig = auth.config({
           consumerSecret: envConfig.TWITTER_CONSUMER_SECRET,
           includeEmail: true,
         },
-        profileMapping: { email: "emails[0].value", id: "id", name: "displayName" },
+        profileMapping: {
+          email: "emails[0].value",
+          id: "id",
+          name: "displayName",
+        },
       },
       linkedIn: {
         clientID: envConfig.LINKEDIN_CLIENT_ID,
@@ -81,7 +116,11 @@ export const authConfig = auth.config({
         strategy: LinkedInStrategy,
         scope: ["r_liteprofile", "r_emailaddress"],
         customConfig: { state: true },
-        profileMapping: { email: "emails[0].value", id: "id", name: "displayName" },
+        profileMapping: {
+          email: "emails[0].value",
+          id: "id",
+          name: "displayName",
+        },
       },
       spotify: {
         clientID: envConfig.SPOTIFY_CLIENT_ID,
@@ -90,7 +129,11 @@ export const authConfig = auth.config({
         strategy: SpotifyStrategy,
         scope: ["user-read-email", "user-read-private"],
         customConfig: { showDialog: true },
-        profileMapping: { email: "emails[0].value", id: "id", name: "display_name" },
+        profileMapping: {
+          email: "emails[0].value",
+          id: "id",
+          name: "display_name",
+        },
       },
       discord: {
         clientID: envConfig.DISCORD_CLIENT_ID,
@@ -104,17 +147,6 @@ export const authConfig = auth.config({
     refreshTokenParam: "refresh",
     accessTokenParam: "access",
   },
-
-  cookies: {
-    enabled: true,
-    name: "AuthRefreshToken",
-    httpOnly: true,
-    secure: false,
-    sameSite: "Strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    path: "/",
-  },
-
 
   session: {
     enabled: false,
@@ -142,7 +174,6 @@ export const authConfig = auth.config({
 
   userService: {
     loadUser: getUserByMail,
-    createUser,
   },
   passwordChecker: verifyPassword,
   logs: true,
