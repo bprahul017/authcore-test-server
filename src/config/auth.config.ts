@@ -37,10 +37,8 @@ export const authConfig = auth.config({
     successRedirect: `${envConfig.BASE_URL}/oauth-success`,
     failureRedirect: `${envConfig.BASE_URL}/oauth-failure`,
     defaultRole: "ROLE_USER",
-    setRefreshCookie: false,
+    setRefreshCookie: true,
     appendTokensInRedirect: false,
-    includeAuthorities: true,
-    issueJwt: true,
     onSuccess(info) {
       const { profile, existingUser, provider } = info;
 
@@ -144,8 +142,6 @@ export const authConfig = auth.config({
         profileMapping: { email: "email", id: "id", name: "username" },
       },
     },
-    refreshTokenParam: "refresh",
-    accessTokenParam: "access",
   },
 
   session: {
@@ -161,7 +157,7 @@ export const authConfig = auth.config({
     enabled: true,
     secret: envConfig.JWT_SECRET,
     expiresIn: "8h",
-    refresh: true,
+    refresh: false,
     refreshExpiresIn: "7d",
     prefix: "/auth/jwt",
     revokeOnRefresh: true,
