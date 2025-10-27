@@ -1,0 +1,53 @@
+[
+  {
+    "id": 2,
+    "username": "Sneha",
+    "email": "sneha.mishra22@yopmail.com",
+    "password": "sneha@456",
+    "is2faEnabled": true,
+    "grants": [
+      "ROLE_USER"
+    ]
+  },
+  {
+    "id": 3,
+    "username": "Amit",
+    "email": "amit.dev99@yopmail.com",
+    "password": "amit@789",
+    "is2faEnabled": true
+  },
+  {
+    "id": 4,
+    "username": "Priya",
+    "email": "priya.kulkarni88@yopmail.com",
+    "password": "priya@321",
+    "is2faEnabled": true
+  },
+  {
+    "id": 5,
+    "username": "Nikhil",
+    "email": "nikhil.rockerz@yopmail.com",
+    "password": "nikhil@654",
+    "is2faEnabled": true
+  },
+  {
+    "id": 6,
+    "email": "rahulzantoz10@gmail.com",
+    "username": "rahulzantoz10@gmail.com",
+    "password": "",
+    "is2faEnabled": false,
+    "grants": [
+      "ROLE_USER"
+    ]
+  },
+  {
+    "id": 7,
+    "email": "rahul.b@flycatchtech.com",
+    "username": "rahul.b@flycatchtech.com",
+    "password": "",
+    "is2faEnabled": false,
+    "grants": [
+      "ROLE_USER"
+    ]
+  }
+]
